@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>jquery-wcagmenu demo</title>
+
+    <style type="text/css">
+        .clearfix:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        a {
+            color: black;
+        }
+        .level-1 {
+            float: left;
+            width: 20%;
+        }
+        .level-1:first-of-type {
+            width: 80%;
+        }
+        .level-2 {
+            float: left;
+            width: 20%;
+        }
+        .level-2:first-of-type {
+            width: 50%;
+        }
+        .level-3 {
+            list-style: none;
+        }
+        .level-3 > a {
+            float: left;
+            display: block;
+            vertical-align: top;
+        }
+        .level-3 > .menu-wrap {
+            float: left;
+        }
+        .focus > a {
+            color: blue;
+        }
+        .focus > a:after {
+            content: ' (Focus)';
+        }
+        .focus.open > a:after {
+            content: ' (Focus, Open)';
+        }
+    </style>
+</head>
+<body>
+
+<!-- 1. Create menu markup with class "level-x" on each menu item -->
+<ol tabindex="90">
+    <li>Use tab key, to focus menu.</li>
+    <li>Use left and right cursor key for first level of navigation (loop). Use down key for opening second level.</li>
+    <li>Use left and right cursor key for second level of navigation. Use down key for opening third level. Use up key for closing second level</li>
+    <li>Use up and down cursor key for third level of navigation. Use right key for opening fourth level. Use up key on first item for closing third level</li>
+    <li>Use up and down cursor key for fourth level of navigation (loop). Use left key for closing fourth level.</li>
+    <li>Use esc any time to close the menu.</li>
+    <li>Use tab key on focused menu to close menu and lose focus.</li>
+    <li>Use space key to open submenu, when present. Otherwise space opens links.</li>
+    <li>Use enter key to open links directly.</li>
+</ol>
+<nav tabindex="100">
+    <ul class="clearfix">
+        <li class="level-1"><a href="#11">Level 1 Item 1</a>
+            <div class="menu-wrap">
+                <ul class="clearfix">
+                    <li class="level-2">
+                        <a href="#21">Level 2 Item 1</a>
+
+                        <div class="menu-wrap">
+                            <ul>
+                                <li class="level-3 clearfix">
+                                    <a href="#31">Level 3 Item 1</a>
+
+                                    <div class="menu-wrap">
+                                        <ul>
+                                            <li class="level-4"><a href="#41">Level 4 Item 1</a></li>
+                                            <li class="level-4"><a href="#42">Level 4 Item 2</a></li>
+                                            <li class="level-4"><a href="#43">Level 4 Item 3</a></li>
+                                            <li class="level-4"><a href="#44">Level 4 Item 4</a></li>
+                                            <li class="level-4"><a href="#45">Level 4 Item 5</a></li>
+                                            <li class="level-4"><a href="#46">Level 4 Item 6</a></li>
+                                            <li class="level-4"><a href="#47">Level 4 Item 7</a></li>
+                                            <li class="level-4"><a href="#48">Level 4 Item 8</a></li>
+                                            <li class="level-4"><a href="#49">Level 4 Item 9</a></li>
+                                            <li class="level-4"><a href="#410">Level 4 Item 10</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="level-3 clearfix">
+                                    <br><br>
+                                    <a href="#32">Level 3 Item 2</a>
+
+                                    <div class="menu-wrap">
+                                        <ul>
+                                            <li class="level-4"><a href="#41">Level 4 Item 1</a></li>
+                                            <li class="level-4"><a href="#42">Level 4 Item 2</a></li>
+                                            <li class="level-4"><a href="#43">Level 4 Item 3</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="level-2"><a href="#22">Level 2 Item 2</a></li>
+                    <li class="level-2"><a href="#23">Level 2 Item 3</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="level-1"><a href="#12">Level 1 Item 2</a></li>
+    </ul>
+</nav>
+<p tabindex=110">Have fun playing around and give feedback on <a href="https://github.com/dachcom-digital/jquery-wcagmenu" target="_blank">Github</a></p>
+
+<!-- 2. Include libraries -->
+<script src="../lib/jquery.min.js"></script>
+<script src="../lib/jquery-ui.min.js"></script>
+<script src="../lib/jquery.dcd.doubletaptogo.js"></script>
+
+<!-- 3. Include widget -->
+<script src="../src/jquery.dcd.wcagmenu.js"></script>
+
+<!-- 4. Bind widget to menu and configure it -->
+<script>
+    $(function () {
+        $('nav').doubleTapToGo();
+        $('nav').wcagmenu({
+            controls: {
+                1: {
+                    left: 'leftLoop',
+                    right: 'rightLoop',
+                    down: 'open'
+                },
+                2: {
+                    left: 'left',
+                    right: 'right',
+                    down: 'open',
+                    up: 'close'
+                },
+                3: {
+                    right: 'open',
+                    down: 'down',
+                    up: 'upClose'
+                },
+                4: {
+                    left: 'close',
+                    down: 'downLoop',
+                    up: 'upLoop'
+                }
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
