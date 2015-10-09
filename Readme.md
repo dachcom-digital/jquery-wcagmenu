@@ -135,8 +135,8 @@ Configuration
 Wishlist
 --------
 * Be more independent of "level-x" classes
-* add aria attributes
-* check usage of roles
+* Add aria attributes
+* Check usage of roles
 
 Resources
 ---------
