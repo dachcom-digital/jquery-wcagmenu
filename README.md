@@ -11,6 +11,8 @@ Features
     * Esc: Close menu
     * Tab: Focus or Blur menu
 * You can configure for which level, which cursor-key, performs which action
+    * open: opens submenu
+    * close: closes submenu
     * left: navigate left
     * leftLoop: navigate left and begin right if start is reached
     * leftClose: navigate left and close submenu if start is reached

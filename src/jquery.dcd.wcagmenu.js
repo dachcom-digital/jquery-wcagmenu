@@ -88,6 +88,11 @@
                 return;
             }
 
+            if (!this._currentFocus.length) {
+                this.element.trigger('focus', {initial: true});
+                return;
+            }
+
             if (this._getLevel($target) > this._getCurrentLevel()) {
                 window.clearTimeout(this._openTimeout);
                 this._activateItem($target);
@@ -113,7 +118,6 @@
 
             if (!$current.length) {
                 delay = 0;
-                this.element.trigger('focus', {initial: true});
             } else {
                 window.clearTimeout(this._openTimeout);
             }
