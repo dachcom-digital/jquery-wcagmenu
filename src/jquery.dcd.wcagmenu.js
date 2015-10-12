@@ -54,10 +54,15 @@
             this._openDelay = this.options.openDelay;
             this._closeDelay = this.options.closeDelay;
 
-            if (window.ontouchstart !== undefined || window.navigator.MaxTouchPoints || window.navigator.msMaxTouchPoints || window.navigator.userAgent.toLowerCase().match(/windows phone os 7/i)) {
+            if (this._isTouchDevice()) {
                 this._openDelay = 0;
             }
+
             this.element.find('a').attr('tabindex', -1);
+        },
+
+        _isTouchDevice: function () {
+            return window.ontouchstart !== undefined || window.navigator.MaxTouchPoints || window.navigator.msMaxTouchPoints || window.navigator.userAgent.toLowerCase().match(/windows phone os 7/i);
         },
 
         _mouseenter: function () {
@@ -88,9 +93,8 @@
                 return;
             }
 
-            if (!this._currentFocus.length) {
+            if (!this._currentFocus.length && !this._isTouchDevice()) {
                 this.element.trigger('focus', {initial: true});
-                return;
             }
 
             if (this._getLevel($target) > this._getCurrentLevel()) {
@@ -502,7 +506,7 @@
             this.element.find('.' + this.options.classOpen).removeClass(this.options.classOpen);
         },
 
-        _destroy: function() {
+        _destroy: function () {
             this.element.find('.' + this.options.classFocus).removeClass(this.options.classFocus);
             this._closeMenu();
             this.element.find('[tabindex]').removeAttr('tabindex');
