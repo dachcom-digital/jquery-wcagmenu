@@ -6,7 +6,7 @@
  * Copyright 2015 DACHCOM.DIGITAL AG
  * @author Volker Andres
  * @see https://github.com/dachcom-digital/jquery-wcagmenu
- * @version 0.1.0
+ * @version 0.1.1
  */
 (function ($) {
     'use strict';
@@ -302,7 +302,7 @@
                 case this._keys.right:
                     return this._key('right');
                 case this._keys.space:
-                    return this._open();
+                    return this._open('space');
                 case this._keys.enter:
                     return this._action();
             }
@@ -332,7 +332,7 @@
             return this._currentFocus.closest('.level-' + (level - 1)).find('.level-' + level);
         },
 
-        _open: function () {
+        _open: function (eventName) {
             var child, level = this._getCurrentLevel();
 
             // open current element, focus first level-x+1 element
@@ -343,7 +343,11 @@
                 return false;
             }
 
-            return this._action();
+            if (eventName === 'space') {
+                return this._action();
+            }
+
+            return false;
         },
 
         _close: function () {
