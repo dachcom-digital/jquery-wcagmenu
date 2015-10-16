@@ -6,7 +6,7 @@
  * Copyright 2015 DACHCOM.DIGITAL AG
  * @author Volker Andres
  * @see https://github.com/dachcom-digital/jquery-wcagmenu
- * @version 0.1.1
+ * @version 0.1.2
  */
 (function ($) {
     'use strict';
@@ -157,6 +157,8 @@
             if (this._currentFocus.closest('[class*=level-]')) {
                 this._currentFocus.parents('[class*=level-]').addClass(this.options.classFocus + ' ' + this.options.classOpen);
             }
+
+            this._trigger('open', {}, [this._currentFocus]);
         },
 
         _resetDelayForMouse: function (event, $target, $child, $current) {
@@ -282,7 +284,6 @@
             var $target = $(event.target);
             if ($target.is(this.element)) {
                 this.element.find('.' + this.options.classFocus).removeClass(this.options.classFocus);
-                this._closeMenu();
                 this._currentFocus = $();
                 this._openTimeout = undefined;
             }
@@ -290,6 +291,8 @@
 
         _keyevent: function (event) {
             switch (event.keyCode) {
+                case this._keys.tab:
+                    return this._closeMenu();
                 case this._keys.esc:
                     this._focusMenu();
                     return this._closeMenu();

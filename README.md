@@ -134,6 +134,16 @@ Configuration
 - **useMenuAim**: There is a smart menu aim logic integrated in the plugin, to make mouse navigation more usable. Deactivate if you just want a simple delay `[Default:true]`
 - **controls**: control on which level, which action is performed. See demo for example
 
+Events
+------
+- **wcagmenuopen**: Event is triggered, when a menu is opened. As parameter the menu object is provided e.g. 
+
+    ```js
+    $('nav').on('wcagmenuopen', function (event, $element) {
+    
+    }
+    ```
+
 Wishlist
 --------
 * Be more independent of "level-x" classes
