@@ -6,7 +6,7 @@
  * Copyright 2015 DACHCOM.DIGITAL AG
  * @author Volker Andres
  * @see https://github.com/dachcom-digital/jquery-wcagmenu
- * @version 0.1.2
+ * @version 0.1.3
  */
 (function ($) {
     'use strict';
@@ -188,6 +188,22 @@
                 action = 'up';
             }
 
+            if ($target.data('down') === 'open') {
+                action = 'down';
+            }
+
+            if ($target.data('right') === 'open') {
+                action = 'right';
+            }
+
+            if ($target.data('left') === 'open') {
+                action = 'left';
+            }
+
+            if ($target.data('up') === 'open') {
+                action = 'up';
+            }
+
             switch (action) {
                 case 'down':
                     ax = $current.offset().left + $current.width() / 2;
@@ -336,13 +352,14 @@
         },
 
         _open: function (eventName) {
-            var child, level = this._getCurrentLevel();
+            var child, level = this._getCurrentLevel(), parent = this._currentFocus;
 
             // open current element, focus first level-x+1 element
             child = this._currentFocus.find('.level-' + (level + 1) + ':first');
             if (child.length) {
                 this._currentFocus.addClass(this.options.classOpen);
                 this._currentFocus = child.addClass(this.options.classFocus);
+                this._trigger('open', {}, [parent]);
                 return false;
             }
 
@@ -371,18 +388,17 @@
             return false;
         },
 
-        _key: function (action) {
-            var level = this._getCurrentLevel();
+        _key: function (direction) {
+            var level = this._getCurrentLevel(), action;
 
-            if (this.options.controls[level] === undefined) {
-                return false;
-            }
+            action = this._currentFocus.data(direction) || this.options.controls[level][direction];
+            action = action || 'none';
 
-            if (this.options.controls[level][action] === undefined) {
-                return false;
-            }
+            return this['_' + action]();
+        },
 
-            return this['_' + this.options.controls[level][action]]();
+        _none: function () {
+            return false;
         },
 
         _left: function () {

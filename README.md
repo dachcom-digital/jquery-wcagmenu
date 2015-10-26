@@ -11,6 +11,7 @@ Features
     * Esc: Close menu
     * Tab: Focus or Blur menu
 * You can configure for which level, which cursor-key, performs which action
+    * none: does nothing (default)
     * open: opens submenu
     * close: closes submenu
     * left: navigate left
@@ -132,7 +133,11 @@ Configuration
 - **closeDelay**: Delay in ms for closing the menu `[Default:300]`
 - **childMenuSelector**: jQuery selector for submenus `[Default:'div:first']`
 - **useMenuAim**: There is a smart menu aim logic integrated in the plugin, to make mouse navigation more usable. Deactivate if you just want a simple delay `[Default:true]`
-- **controls**: control on which level, which action is performed. See demo for example
+- **controls**: control on which level, which action is performed. 
+
+Controls
+--------
+See demo for example configuration. You can overwrite the configuration with data attributes for each and every single element in the menu. You can use ```data-left```, ```data-right```, ```data-down``` and ```data-up```. 
 
 Events
 ------
@@ -149,6 +154,7 @@ Wishlist
 * Be more independent of "level-x" classes
 * Add aria attributes
 * Check usage of roles
+* more demos
 
 Resources
 ---------
@@ -156,3 +162,20 @@ Resources
 * [Inspiration](https://adobe-accessibility.github.io/Accessible-Mega-Menu/)
 * [Usability Inspiration](https://github.com/kamens/jQuery-menu-aim)
 * [Responsive](https://github.com/dachcom-digital/jquery-doubleTapToGo)
+
+Changelog
+---------
+### 0.1.3
+* [Feature] added new action 'none' for resetting
+* [Feature] added possibility to rewrite controls with data attributes
+* [Fix] open event is now also triggered by keyboard control
+
+### 0.1.2
+* [Feature] added 'open' event ('wcagmenuopen')
+* [Fix] few bugfixes with keyboard control
+
+### 0.1.1
+* [Fix] few bugfixes with mouse and touch control
+
+### 0.1.0
+* [Feature] initial release
