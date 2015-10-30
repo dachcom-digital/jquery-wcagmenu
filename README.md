@@ -148,6 +148,13 @@ Events
     
     }
     ```
+- **wcagmenufocus**: Event is triggered, when a menu item is focused. As parameter the menu object is provided e.g. 
+
+    ```js
+    $('nav').on('wcagmenufocus', function (event, $element) {
+    
+    }
+    ```
 
 Wishlist
 --------
@@ -165,6 +172,10 @@ Resources
 
 Changelog
 ---------
+### 0.1.4
+* [Feature] added 'focus' event
+* [Feature] added minfied version
+
 ### 0.1.3
 * [Feature] added new action 'none' for resetting
 * [Feature] added possibility to rewrite controls with data attributes
