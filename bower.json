@@ -1,6 +1,6 @@
 {
     "name": "jquery-wcagmenu",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "main": [
         "src/jquery.dcd.wcagmenu.js"
     ],

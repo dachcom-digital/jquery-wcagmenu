@@ -2,11 +2,15 @@
 /*jslint nomen:true,plusplus:true*/
 
 /**
+ * @preserve
+ *
  * jquery-wcagmenu widget
  * Copyright 2015 DACHCOM.DIGITAL AG
+ *
  * @author Volker Andres
  * @see https://github.com/dachcom-digital/jquery-wcagmenu
- * @version 0.1.3
+ * @license MIT
+ * @version 0.1.4
  */
 (function ($) {
     'use strict';
@@ -161,6 +165,16 @@
             this._trigger('open', {}, [this._currentFocus]);
         },
 
+        _addFocus: function ($elements) {
+            $elements.addClass(this.options.classFocus);
+            this._trigger('focus', {}, [$elements]);
+            return $elements;
+        },
+
+        _removeFocus: function ($elements) {
+            return $elements.removeClass(this.options.classFocus);
+        },
+
         _resetDelayForMouse: function (event, $target, $child, $current) {
             if (!this.options.useMenuAim) {
                 return false;
@@ -299,7 +313,7 @@
         _blur: function (event) {
             var $target = $(event.target);
             if ($target.is(this.element)) {
-                this.element.find('.' + this.options.classFocus).removeClass(this.options.classFocus);
+                this._removeFocus(this.element.find('.' + this.options.classFocus));
                 this._currentFocus = $();
                 this._openTimeout = undefined;
             }
@@ -358,7 +372,7 @@
             child = this._currentFocus.find('.level-' + (level + 1) + ':first');
             if (child.length) {
                 this._currentFocus.addClass(this.options.classOpen);
-                this._currentFocus = child.addClass(this.options.classFocus);
+                this._currentFocus = this._addFocus(child);
                 this._trigger('open', {}, [parent]);
                 return false;
             }
@@ -408,8 +422,8 @@
             index = siblings.index(this._currentFocus);
 
             if (index !== 0) {
-                this._currentFocus.removeClass(this.options.classFocus);
-                this._currentFocus = siblings.eq(index - 1).addClass(this.options.classFocus);
+                this._removeFocus(this._currentFocus);
+                this._currentFocus = this._addFocus(siblings.eq(index - 1));
             }
             return false;
         },
@@ -420,13 +434,13 @@
             siblings = this._getSiblings();
             index = siblings.index(this._currentFocus);
 
-            this._currentFocus.removeClass(this.options.classFocus);
+            this._removeFocus(this._currentFocus);
             if (index === 0) {
                 // first reached, focus last
-                this._currentFocus = siblings.eq(siblings.length - 1).addClass(this.options.classFocus);
+                this._currentFocus = this._addFocus(siblings.eq(siblings.length - 1));
             } else {
                 // focus prev
-                this._currentFocus = siblings.eq(index - 1).addClass(this.options.classFocus);
+                this._currentFocus = this._addFocus(siblings.eq(index - 1));
             }
             return false;
         },
@@ -437,13 +451,13 @@
             siblings = this._getSiblings();
             index = siblings.index(this._currentFocus);
 
-            this._currentFocus.removeClass(this.options.classFocus);
+            this._removeFocus(this._currentFocus);
             if (index === 0) {
                 // first reached, close parent
                 this._close();
             } else {
                 // focus prev
-                this._currentFocus = siblings.eq(index - 1).addClass(this.options.classFocus);
+                this._currentFocus = this._addFocus(siblings.eq(index - 1));
             }
             return false;
         },
@@ -455,8 +469,8 @@
             index = siblings.index(this._currentFocus);
 
             if (index !== siblings.length - 1) {
-                this._currentFocus.removeClass(this.options.classFocus);
-                this._currentFocus = siblings.eq(index + 1).addClass(this.options.classFocus);
+                this._removeFocus(this._currentFocus);
+                this._currentFocus = this._addFocus(siblings.eq(index + 1));
             }
 
             return false;
@@ -468,13 +482,13 @@
             siblings = this._getSiblings();
             index = siblings.index(this._currentFocus);
 
-            this._currentFocus.removeClass(this.options.classFocus);
+            this._removeFocus(this._currentFocus);
             if (index === siblings.length - 1) {
                 // end reached, focus first
-                this._currentFocus = siblings.eq(0).addClass(this.options.classFocus);
+                this._currentFocus = this._addFocus(siblings.eq(0));
             } else {
                 // focus next
-                this._currentFocus = siblings.eq(index + 1).addClass(this.options.classFocus);
+                this._currentFocus = this._addFocus(siblings.eq(index + 1));
             }
             return false;
         },
@@ -485,13 +499,13 @@
             siblings = this._getSiblings();
             index = siblings.index(this._currentFocus);
 
-            this._currentFocus.removeClass(this.options.classFocus);
+            this._removeFocus(this._currentFocus);
             if (index === siblings.length - 1) {
                 // end reached, close parent
                 this._close();
             } else {
                 // focus next
-                this._currentFocus = siblings.eq(index + 1).addClass(this.options.classFocus);
+                this._currentFocus = this._addFocus(siblings.eq(index + 1));
             }
             return false;
         },
@@ -521,8 +535,8 @@
         },
 
         _focusMenu: function () {
-            this.element.find('.' + this.options.classFocus).removeClass(this.options.classFocus);
-            this._currentFocus = this.element.find('.level-1:first').addClass(this.options.classFocus);
+            this._removeFocus(this.element.find('.' + this.options.classFocus));
+            this._currentFocus = this._addFocus(this.element.find('.level-1:first'));
         },
 
         _closeMenu: function () {
@@ -530,7 +544,7 @@
         },
 
         _destroy: function () {
-            this.element.find('.' + this.options.classFocus).removeClass(this.options.classFocus);
+            this._removeFocus(this.element.find('.' + this.options.classFocus));
             this._closeMenu();
             this.element.find('[tabindex]').removeAttr('tabindex');
         }
