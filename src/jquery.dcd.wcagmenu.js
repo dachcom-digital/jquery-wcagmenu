@@ -10,7 +10,7 @@
  * @author Volker Andres
  * @see https://github.com/dachcom-digital/jquery-wcagmenu
  * @license MIT
- * @version 0.1.4
+ * @version 0.1.5
  */
 (function ($) {
     'use strict';
@@ -154,15 +154,35 @@
         },
 
         _activateItem: function ($target) {
-            this.element.find('.' + this.options.classFocus + ', .' + this.options.classOpen).removeClass(this.options.classFocus + ' ' + this.options.classOpen);
-            this._currentFocus = $target.addClass(this.options.classFocus + ' ' + this.options.classOpen);
-            this._currentFocus.find('.' + this.options.classFocus + ', .' + this.options.classOpen).removeClass(this.options.classFocus + ' ' + this.options.classOpen);
+            this._closeItems($target);
+
+            this._currentFocus = this._addFocus($target);
+            if (this._currentFocus.find('[class*=level-]').length) {
+                this._currentFocus.addClass(this.options.classOpen);
+            }
 
             if (this._currentFocus.closest('[class*=level-]')) {
                 this._currentFocus.parents('[class*=level-]').addClass(this.options.classFocus + ' ' + this.options.classOpen);
             }
 
             this._trigger('open', {}, [this._currentFocus]);
+        },
+
+        _closeItems: function ($target) {
+            var $closeElements, $openElements, self = this,
+                commonParent = $($target).parents().has(this._currentFocus).first().closest('[class*=level-]');
+
+            $closeElements = this._currentFocus.parentsUntil(commonParent, '[class*=level-]').andSelf();
+            $openElements = $target.parentsUntil(commonParent, '[class*=level-]').andSelf();
+
+            $closeElements.not($openElements).each(function () {
+                var $this = $(this);
+                self._removeFocus($this);
+                if ($this.hasClass(self.options.classOpen)) {
+                    $this.removeClass(self.options.classOpen);
+                    self._trigger('close', {}, [$this]);
+                }
+            });
         },
 
         _addFocus: function ($elements) {
@@ -313,9 +333,7 @@
         _blur: function (event) {
             var $target = $(event.target);
             if ($target.is(this.element)) {
-                this._removeFocus(this.element.find('.' + this.options.classFocus));
-                this._currentFocus = $();
-                this._openTimeout = undefined;
+                this._closeMenu();
             }
         },
 
@@ -324,8 +342,8 @@
                 case this._keys.tab:
                     return this._closeMenu();
                 case this._keys.esc:
-                    this._focusMenu();
-                    return this._closeMenu();
+                    this._closeMenu();
+                    return this._focusMenu();
                 case this._keys.down:
                     return this._key('down');
                 case this._keys.up:
@@ -392,6 +410,7 @@
             if (parent.length) {
                 this._currentFocus = parent.removeClass(this.options.classOpen);
                 parent.find('.' + this.options.classFocus + ', .' + this.options.classOpen).removeClass(this.options.classFocus + ' ' + this.options.classOpen);
+                this._trigger('close', {}, [parent]);
             }
 
             return false;
@@ -536,15 +555,26 @@
 
         _focusMenu: function () {
             this._removeFocus(this.element.find('.' + this.options.classFocus));
-            this._currentFocus = this._addFocus(this.element.find('.level-1:first'));
+            if (this._currentFocus.length) {
+                this._currentFocus = this._addFocus(this._currentFocus.closest('.level-1'));
+            } else {
+                this._currentFocus = this._addFocus(this.element.find('.level-1:first'));
+            }
         },
 
         _closeMenu: function () {
-            this.element.find('.' + this.options.classOpen).removeClass(this.options.classOpen);
+            var self = this, $this;
+            $.each(this.element.find('.' + this.options.classOpen), function () {
+                $this = $(this);
+                $this.removeClass(self.options.classOpen);
+                self._trigger('close', {}, [$this]);
+            });
+
+            this._removeFocus(this.element.find('.' + this.options.classFocus));
+            this._trigger('closemenu', {}, [this.element]);
         },
 
         _destroy: function () {
-            this._removeFocus(this.element.find('.' + this.options.classFocus));
             this._closeMenu();
             this.element.find('[tabindex]').removeAttr('tabindex');
         }

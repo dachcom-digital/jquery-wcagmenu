@@ -141,17 +141,31 @@ See demo for example configuration. You can overwrite the configuration with dat
 
 Events
 ------
-- **wcagmenuopen**: Event is triggered, when a menu is opened. As parameter the menu object is provided e.g. 
+- **wcagmenuopen**: Event is triggered, when a submenu is opened. As parameter the submenu object is provided e.g. 
 
     ```js
     $('nav').on('wcagmenuopen', function (event, $element) {
     
     }
     ```
-- **wcagmenufocus**: Event is triggered, when a menu item is focused. As parameter the menu object is provided e.g. 
+- **wcagmenufocus**: Event is triggered, when a menuitem is focused. As parameter the menuitem object is provided e.g. 
 
     ```js
     $('nav').on('wcagmenufocus', function (event, $element) {
+    
+    }
+    ```
+- **wcagmenuclose**: Event is triggered, when a submenu is closed. As parameter the submenu object is provided e.g. 
+
+    ```js
+    $('nav').on('wcagmenuclose', function (event, $element) {
+    
+    }
+    ```
+- **wcagmenuclosemenu**: Event is triggered, when the menu is closed. As parameter the menu object is provided e.g. 
+
+    ```js
+    $('nav').on('wcagmenuclosemenu', function (event, $element) {
     
     }
     ```
@@ -172,6 +186,12 @@ Resources
 
 Changelog
 ---------
+### 0.1.5
+* [Feature] added 'close' and 'closemenu' event
+* [Feature] when menu is focused again, last active first-level item is focused
+* [Fix] Not all elements are closed on activation, but only necessary
+* [Fix] 'open' class is only rendered on elements with submenus (mouse)
+
 ### 0.1.4
 * [Feature] added 'focus' event
 * [Feature] added minfied version
