@@ -186,6 +186,10 @@ Resources
 
 Changelog
 ---------
+### 0.1.6
+* [Fix] collision with other level classes (like menulevel-1)
+* [Fix] focus on element prevents click on links 
+
 ### 0.1.5
 * [Feature] added 'close' and 'closemenu' event
 * [Feature] when menu is focused again, last active first-level item is focused

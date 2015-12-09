@@ -91,14 +91,10 @@
         },
 
         _mouseover: function (event) {
-            var $target = $(event.target).closest('[class*=level-]');
+            var $target = $(event.target).closest('[class*=" level-"], [class^="level-"]');
 
             if (!$target.length) {
                 return;
-            }
-
-            if (!this._currentFocus.length && !this._isTouchDevice()) {
-                this.element.trigger('focus', {initial: true});
             }
 
             if (this._getLevel($target) > this._getCurrentLevel()) {
@@ -108,7 +104,7 @@
         },
 
         _mousemove: function (event) {
-            var $target = $(event.target).closest('[class*=level-]');
+            var $target = $(event.target).closest('[class*=" level-"], [class^="level-"]');
 
             if (!$target.length) {
                 return;
@@ -121,7 +117,7 @@
             var self = this,
                 $current = self._currentFocus,
                 $child = $current.find(this.options.childMenuSelector),
-                $target = $(event.target).closest('[class*=level-]'),
+                $target = $(event.target).closest('[class*=" level-"], [class^="level-"]'),
                 delay = this._openDelay;
 
             if (!$current.length) {
@@ -161,8 +157,8 @@
                 this._currentFocus.addClass(this.options.classOpen);
             }
 
-            if (this._currentFocus.closest('[class*=level-]')) {
-                this._currentFocus.parents('[class*=level-]').addClass(this.options.classFocus + ' ' + this.options.classOpen);
+            if (this._currentFocus.closest('[class*=" level-"], [class^="level-"]')) {
+                this._currentFocus.parents('[class*=" level-"], [class^="level-"]').addClass(this.options.classFocus + ' ' + this.options.classOpen);
             }
 
             this._trigger('open', {}, [this._currentFocus]);
@@ -170,7 +166,7 @@
 
         _closeItems: function ($target) {
             var $closeElements, $openElements, self = this,
-                commonParent = $($target).parents().has(this._currentFocus).first().closest('[class*=level-]');
+                commonParent = $($target).parents().has(this._currentFocus).first().closest('[class*=" level-"], [class^="level-"]');
 
             $closeElements = this._currentFocus.parentsUntil(commonParent, '[class*=level-]').andSelf();
             $openElements = $target.parentsUntil(commonParent, '[class*=level-]').andSelf();
@@ -322,10 +318,9 @@
             return result;
         },
 
-        _focus: function (event, additional) {
-            additional = additional || {};
+        _focus: function (event) {
             var $target = $(event.target);
-            if (!additional.initial && $target.is(this.element)) {
+            if ($target.is(this.element)) {
                 this._focusMenu();
             }
         },
