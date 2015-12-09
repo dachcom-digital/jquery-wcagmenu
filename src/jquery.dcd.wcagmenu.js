@@ -10,7 +10,7 @@
  * @author Volker Andres
  * @see https://github.com/dachcom-digital/jquery-wcagmenu
  * @license MIT
- * @version 0.1.5
+ * @version 0.1.6
  */
 (function ($) {
     'use strict';
