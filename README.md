@@ -139,6 +139,10 @@ Controls
 --------
 See demo for example configuration. You can overwrite the configuration with data attributes for each and every single element in the menu. You can use ```data-left```, ```data-right```, ```data-down``` and ```data-up```. 
 
+Menuaim
+-------
+Menuaim is enabled by default. If you want to disable it for specific menu items, you can use ```data-menuaim="false"``` on them. Always the last focused item is checked for that data attribute, so be sure to use it correctly on child and parent elements.
+
 Events
 ------
 - **wcagmenuopen**: Event is triggered, when a submenu is opened. As parameter the submenu object is provided e.g. 
@@ -176,6 +180,7 @@ Wishlist
 * Add aria attributes
 * Check usage of roles
 * more demos
+* separate focus and open for mouse control
 
 Resources
 ---------
@@ -186,6 +191,9 @@ Resources
 
 Changelog
 ---------
+### 0.1.7
+* [Feature] added option to disable menuaim on specific menu items via data attribute
+
 ### 0.1.6
 * [Fix] collision with other level classes (like menulevel-1)
 * [Fix] focus on element prevents click on links 

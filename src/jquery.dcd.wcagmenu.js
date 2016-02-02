@@ -10,7 +10,7 @@
  * @author Volker Andres
  * @see https://github.com/dachcom-digital/jquery-wcagmenu
  * @license MIT
- * @version 0.1.6
+ * @version 0.1.7
  */
 (function ($) {
     'use strict';
@@ -192,6 +192,10 @@
         },
 
         _resetDelayForMouse: function (event, $target, $child, $current) {
+            if ($current.data('menuaim') === false) {
+                return true;
+            }
+
             if (!this.options.useMenuAim) {
                 return false;
             }
