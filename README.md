@@ -133,7 +133,9 @@ Configuration
 - **closeDelay**: Delay in ms for closing the menu `[Default:300]`
 - **childMenuSelector**: jQuery selector for submenus `[Default:'div:first']`
 - **useMenuAim**: There is a smart menu aim logic integrated in the plugin, to make mouse navigation more usable. Deactivate if you just want a simple delay `[Default:true]`
-- **controls**: control on which level, which action is performed. 
+- **controls**: control on which level, which action is performed.
+- **useMouseDistanceThreshold**: measure mouse speed to decide if the menu opens with or without delay `[Default:'false']`
+- **mouseDistanceThreshold**: mouse distance for threshold `[Default:'10']`
 
 Controls
 --------
@@ -191,6 +193,9 @@ Resources
 
 Changelog
 ---------
+### 0.2.0
+* [Feature] Measure mouse speed to decide if the menu opens with or without delay
+
 ### 0.1.7
 * [Feature] added option to disable menuaim on specific menu items via data attribute
 

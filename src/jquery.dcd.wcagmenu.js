@@ -10,7 +10,7 @@
  * @author Volker Andres
  * @see https://github.com/dachcom-digital/jquery-wcagmenu
  * @license MIT
- * @version 0.1.7
+ * @version 0.2.0
  */
 (function ($) {
     'use strict';
@@ -23,7 +23,9 @@
             openDelay: 300,
             closeDelay: 300,
             childMenuSelector: 'div:first',
-            useMenuAim: true
+            useMenuAim: true,
+            useMouseDistanceThreshold: false,
+            mouseDistanceThreshold: 10
         },
 
         _keys: {
@@ -43,6 +45,7 @@
         _openDelay: 300,
         _closeDelay: 300,
         _mousePoints: {},
+        _track: {},
 
         _create: function () {
             this._on({
@@ -69,11 +72,15 @@
             return window.ontouchstart !== undefined || window.navigator.MaxTouchPoints || window.navigator.msMaxTouchPoints || window.navigator.userAgent.toLowerCase().match(/windows phone os 7/i);
         },
 
-        _mouseenter: function () {
+        _mouseenter: function (event) {
             var self = this;
 
             if (self._closeTimeout !== undefined) {
                 window.clearTimeout(self._closeTimeout);
+            }
+
+            if (self._openTimeout !== undefined) {
+                window.clearTimeout(self._openTimeout);
             }
         },
 
@@ -82,6 +89,10 @@
 
             if (self._closeTimeout !== undefined) {
                 window.clearTimeout(self._closeTimeout);
+            }
+
+            if (self._openTimeout !== undefined) {
+                window.clearTimeout(self._openTimeout);
             }
 
             self._closeTimeout = window.setTimeout(function () {
@@ -126,13 +137,25 @@
                 window.clearTimeout(this._openTimeout);
             }
 
-            if (delay > 0 && !self._currentFocus.find('[class*=level-]').length) {
+            if (delay > 0 && !$current.find('[class*=level-]').length) {
                 delay = 0;
             }
 
             if (delay > 0 && $current.length && $child.length) {
+
                 if (this._resetDelayForMouse(event, $target, $child, $current)) {
                     delay = 0;
+                }
+
+                if ( delay > 0 && this.options.useMouseDistanceThreshold ) {
+                    var dist = this._calcMouseDistance(event);
+
+                    if ( dist !== false && dist < this.options.mouseDistanceThreshold ) {
+                        delay = 0;
+
+                        delete this._track.x;
+                        delete this._track.y;
+                    }
                 }
 
                 self._mousePoints.x = event.pageX;
@@ -147,6 +170,26 @@
                     self._mousePoints = {};
                 }, delay);
             }
+        },
+
+        _calcMouseDistance: function(event) {
+
+            if ( typeof this._track.x === 'undefined' ) {
+                this._track.x = event.pageX;
+                this._track.y = event.pageY;
+
+                return false;
+            }
+
+            var dX = Math.abs( event.pageX - this._track.x ),
+                dY = Math.abs( event.pageY - this._track.y ),
+                distance = Math.sqrt( Math.pow(dX, 2) + Math.pow(dY, 2) );
+
+            this._track.x = event.pageX;
+            this._track.y = event.pageY;
+
+            return distance;
+
         },
 
         _activateItem: function ($target) {
