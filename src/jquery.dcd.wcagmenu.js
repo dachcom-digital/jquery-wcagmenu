@@ -10,7 +10,7 @@
  * @author Volker Andres
  * @see https://github.com/dachcom-digital/jquery-wcagmenu
  * @license MIT
- * @version 0.2.0
+ * @version 0.2.1
  */
 (function ($) {
     'use strict';
@@ -46,6 +46,7 @@
         _closeDelay: 300,
         _mousePoints: {},
         _track: {},
+        _closing: false,
 
         _create: function () {
             this._on({
@@ -55,7 +56,9 @@
                 'mouseover': '_mouseover',
                 'mousemove': '_mousemove',
                 'mouseleave': '_mouseleave',
-                'mouseenter': '_mouseenter'
+                'mouseenter': '_mouseenter',
+                'mousedown [class*=" level-"]': '_mousedown',
+                'mousedown [class^="level-"]': '_mousedown'
             });
 
             this._openDelay = this.options.openDelay;
@@ -124,6 +127,15 @@
             this._openItem(event);
         },
 
+        _mousedown: function () {
+            var self = this;
+            this._closing = true
+
+            window.setTimeout(function () {
+                self._closing = false
+            }, 10);
+        },
+
         _openItem: function (event) {
             var self = this,
                 $current = self._currentFocus,
@@ -147,10 +159,10 @@
                     delay = 0;
                 }
 
-                if ( delay > 0 && this.options.useMouseDistanceThreshold ) {
+                if (delay > 0 && this.options.useMouseDistanceThreshold) {
                     var dist = this._calcMouseDistance(event);
 
-                    if ( dist !== false && dist < this.options.mouseDistanceThreshold ) {
+                    if (dist !== false && dist < this.options.mouseDistanceThreshold) {
                         delay = 0;
 
                         delete this._track.x;
@@ -172,18 +184,18 @@
             }
         },
 
-        _calcMouseDistance: function(event) {
+        _calcMouseDistance: function (event) {
 
-            if ( typeof this._track.x === 'undefined' ) {
+            if (typeof this._track.x === 'undefined') {
                 this._track.x = event.pageX;
                 this._track.y = event.pageY;
 
                 return false;
             }
 
-            var dX = Math.abs( event.pageX - this._track.x ),
-                dY = Math.abs( event.pageY - this._track.y ),
-                distance = Math.sqrt( Math.pow(dX, 2) + Math.pow(dY, 2) );
+            var dX = Math.abs(event.pageX - this._track.x),
+                dY = Math.abs(event.pageY - this._track.y),
+                distance = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
 
             this._track.x = event.pageX;
             this._track.y = event.pageY;
@@ -606,14 +618,17 @@
 
         _closeMenu: function () {
             var self = this, $this;
-            $.each(this.element.find('.' + this.options.classOpen), function () {
-                $this = $(this);
-                $this.removeClass(self.options.classOpen);
-                self._trigger('close', {}, [$this]);
-            });
 
-            this._removeFocus(this.element.find('.' + this.options.classFocus));
-            this._trigger('closemenu', {}, [this.element]);
+            if (this._closing !== true) {
+                $.each(self.element.find('.' + self.options.classOpen), function () {
+                    $this = $(this);
+                    $this.removeClass(self.options.classOpen);
+                    self._trigger('close', {}, [$this]);
+                });
+
+                this._removeFocus(this.element.find('.' + this.options.classFocus));
+                this._trigger('closemenu', {}, [this.element]);
+            }
         },
 
         _destroy: function () {

@@ -193,6 +193,9 @@ Resources
 
 Changelog
 ---------
+### 0.2.1
+* [Fix] Links not working when menu losing focus
+
 ### 0.2.0
 * [Feature] Measure mouse speed to decide if the menu opens with or without delay
 
