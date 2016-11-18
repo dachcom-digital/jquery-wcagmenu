@@ -4,7 +4,7 @@
         "src/jquery.dcd.wcagmenu.js"
     ],
     "dependencies": {
-        "jquery": ">=1.6",
+        "jquery": ">=1.8",
         "jquery-ui": ">=1.10"
     }
 }

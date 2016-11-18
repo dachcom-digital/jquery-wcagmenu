@@ -5,12 +5,12 @@
  * @preserve
  *
  * jquery-wcagmenu widget
- * Copyright 2015 DACHCOM.DIGITAL AG
+ * Copyright 2016 DACHCOM.DIGITAL AG
  *
  * @author Volker Andres
  * @see https://github.com/dachcom-digital/jquery-wcagmenu
  * @license MIT
- * @version 0.2.1
+ * @version 0.2.2
  */
 (function ($) {
     'use strict';
@@ -223,8 +223,8 @@
             var $closeElements, $openElements, self = this,
                 commonParent = $($target).parents().has(this._currentFocus).first().closest('[class*=" level-"], [class^="level-"]');
 
-            $closeElements = this._currentFocus.parentsUntil(commonParent, '[class*=level-]').andSelf();
-            $openElements = $target.parentsUntil(commonParent, '[class*=level-]').andSelf();
+            $closeElements = this._currentFocus.parentsUntil(commonParent, '[class*=level-]').addBack();
+            $openElements = $target.parentsUntil(commonParent, '[class*=level-]').addBack();
 
             $closeElements.not($openElements).each(function () {
                 var $this = $(this);

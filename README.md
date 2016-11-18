@@ -193,6 +193,9 @@ Resources
 
 Changelog
 ---------
+### 0.2.2
+* [Fix] Compatibility with jQuery 3
+
 ### 0.2.1
 * [Fix] Links not working when menu losing focus
 
